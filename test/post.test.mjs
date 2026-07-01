@@ -1,10 +1,9 @@
-const chai = require("chai");
-const chaiHttp = require("chai-http");
-const server = require("../index");
-
-chai.should();
+import * as chai from "chai";
+import chaiHttp, { request } from "chai-http";
+import server from "../index.js";
 
 chai.use(chaiHttp);
+chai.should();
 
 let newPostId = 0;
 
@@ -14,8 +13,8 @@ describe("POST API", () => {
     const UN_AUTHORIZED_ID = 4;
 
     it("It should create new post as a member only", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .post(`/posts`)
         .set("user_id", AUTHORIZED_ID)
         .send({
@@ -33,8 +32,8 @@ describe("POST API", () => {
     });
 
     it("It should fail to create new post because user is a moderator", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .post(`/posts`)
         .set("user_id", UN_AUTHORIZED_ID)
         .send({
@@ -54,8 +53,8 @@ describe("POST API", () => {
     const UN_AUTHORIZED_ID = 24;
 
     it("It should get all post as a user (moderator and member)", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .get(`/posts`)
         .set("user_id", AUTHORIZED_ID)
         .end((err, res) => {
@@ -67,8 +66,8 @@ describe("POST API", () => {
     });
 
     it("It should fail to get all post as an unknown user", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .get(`/posts`)
         .set("user_id", UN_AUTHORIZED_ID)
         .end((err, res) => {
@@ -84,8 +83,8 @@ describe("POST API", () => {
     const UN_AUTHORIZED_ID = 24;
 
     it("It should get single post as a user (moderator and member)", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .get(`/posts/366283`)
         .set("user_id", AUTHORIZED_ID)
         .end((err, res) => {
@@ -97,8 +96,8 @@ describe("POST API", () => {
     });
 
     it("It should fail to get single post as an unknown user", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .get(`/posts/366283`)
         .set("user_id", UN_AUTHORIZED_ID)
         .end((err, res) => {
@@ -115,8 +114,8 @@ describe("POST API", () => {
     const UN_AUTHORIZED_MODERATOR_ID = 5;
 
     it("It should flag a single post as a moderator", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .post(`/posts/flag/366283`)
         .send({
           flag: true,
@@ -130,8 +129,8 @@ describe("POST API", () => {
     });
 
     it("It should fail to flag a single post as an unauthorized moderator", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .post(`/posts/flag/366283`)
         .send({
           flag: true,
@@ -145,8 +144,8 @@ describe("POST API", () => {
     });
 
     it("It should fail to flag a single post as a member", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .post(`/posts/flag/366283`)
         .send({
           flag: true,
@@ -167,8 +166,8 @@ describe("POST API", () => {
     const UN_AUTHORIZED_MODERATOR_ID = 5;
 
     it("It should update a single post as owner of post", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .patch(`/posts/${newPostId}`)
         .send({
           title: "Authorization in NodeJs",
@@ -184,8 +183,8 @@ describe("POST API", () => {
     });
 
     it("It should fail to update a single post if user is not owner of the post", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .patch(`/posts/${newPostId}`)
         .send({
           title: "Authorization in NodeJs",
@@ -201,8 +200,8 @@ describe("POST API", () => {
     });
 
     it("It should update a single post if user is a moderator and post is flagged true", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .patch(`/posts/366283`)
         .send({
           title: "Authorization in NodeJs",
@@ -218,8 +217,8 @@ describe("POST API", () => {
     });
 
     it("It should fail to update a single post if user is a moderator and post is flagged false", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .patch(`/posts/366283`)
         .send({
           title: "Authorization in NodeJs",
@@ -241,8 +240,8 @@ describe("POST API", () => {
     const MODERATOR_ID = 4;
 
     it("It should delete a single post as owner of post", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .delete(`/posts/${newPostId}`)
         .set("user_id", AUTHORIZED_ID)
         .end((err, res) => {
@@ -253,8 +252,8 @@ describe("POST API", () => {
     });
 
     it("It should fail to delete a single post if user is not owner of the post", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .delete(`/posts/${newPostId}`)
         .set("user_id", UN_AUTHORIZED_ID)
         .end((err, res) => {
@@ -265,8 +264,8 @@ describe("POST API", () => {
     });
 
     it("It should fail to delete a single post if user is a moderator", (done) => {
-      chai
-        .request(server)
+      request
+        .execute(server)
         .delete(`/posts/${newPostId}`)
         .set("user_id", MODERATOR_ID)
         .end((err, res) => {
