@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cerbos/grpc": "^0.28.0",
+    "@cerbos/grpc": "^0.29.0",
     "express": "^5.2.1"
   },
   "devDependencies": {
